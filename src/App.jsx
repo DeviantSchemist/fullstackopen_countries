@@ -19,6 +19,7 @@ const App = () => {
     <div>
       <span>find countries</span>
       <input type="text" value={countrySearch} onChange={(event) => setCountrySearch(event.target.value)} />
+      <br />
       {countrySearch ? <FilterCountries countries={countries.filter(country => country.name.common.toLowerCase().includes(countrySearch.toLowerCase()))} />
       : null}
     </div>
