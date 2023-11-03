@@ -1,8 +1,23 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import axios from 'axios'
 
 const CountryDisplay = ({ country }) => {
 
   const [press, setPress] = useState(false);
+  const [apiData, setApiData] = useState({});
+  
+  const api_key = import.meta.env.VITE_API_KEY;
+
+  useEffect(() => {
+    if (press) {
+      axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${api_key}`)
+        .then(response => {
+          console.log(response.data)
+          setApiData(response.data);
+        })
+        .catch(err => console.error(err));
+    }
+  }, [press]);
   
   return (
     <>
@@ -16,6 +31,8 @@ const CountryDisplay = ({ country }) => {
             {Object.entries(country.languages).map(([key, value]) => <li>{value}</li>)}
           </ul>
           <img src={country.flags.png} alt={country.flags.alt} />
+          <h3>{`Weather in ${country.name.common}`}</h3>
+          <p>{`temperature `}</p>
         </>
         : <>
             <span>{country.name.common}</span>
