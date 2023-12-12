@@ -4,13 +4,15 @@ import axios from 'axios'
 const CountryDisplay = ({ country }) => {
 
   const [press, setPress] = useState(false);
-  const [apiData, setApiData] = useState({});
+  const [apiData, setApiData] = useState({ main: {}, wind: {}, weather: [{}] });   // needs to be instantiated with api object structure
   
   const api_key = import.meta.env.VITE_API_KEY;
 
+  
+
   useEffect(() => {
     if (press) {
-      axios.get(`https://api.openweathermap.org/data/3.0/onecall?lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${api_key}`)
+      axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${country.latlng[0]}&lon=${country.latlng[1]}&appid=${api_key}&units=imperial`)
         .then(response => {
           console.log(response.data)
           setApiData(response.data);
@@ -32,7 +34,9 @@ const CountryDisplay = ({ country }) => {
           </ul>
           <img src={country.flags.png} alt={country.flags.alt} />
           <h3>{`Weather in ${country.name.common}`}</h3>
-          <p>{`temperature `}</p>
+          <p>{` Temperature ${JSON.stringify(apiData.main.temp)} fahrenheit`}</p>
+          <img src={`https://openweathermap.org/img/wn/${apiData.weather[0].icon}@2x.png`} alt={JSON.stringify(apiData.weather[0].description)} />
+          <p>{`Wind ${JSON.stringify(apiData.wind.speed)}`}</p>
         </>
         : <>
             <span>{country.name.common}</span>
